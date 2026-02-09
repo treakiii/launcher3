@@ -28,17 +28,14 @@ const EventsWidget = (props: EventsWidgetProps) => {
   useEffect(() => {
     const interval = setInterval(() => {
       setSelected((prev) => (prev + 1) % filtered.length);
-      console.log(
-        `EventsWidget: changing event to ${filtered[selected].event.ID}`
-      );
     }, 7000);
 
     return () => clearInterval(interval);
-  }, [filtered]);
+  }, [filtered.length]);
 
   return (
     <>
-      <div className="group flex flex-col gap-2 relative max-h-50 w-[60%] min-w-[50%] @max-xl:w-full aspect-[16/8.5] bg-neutral-800/10 rounded-sm border-neutral-700/40 border-1 border-solid cursor-pointer overflow-hidden">
+      <div className="glass group relative flex flex-col gap-2 w-full aspect-[21/9] rounded-3xl cursor-pointer overflow-hidden shadow-2xl">
         <EventDisplay event={filtered[selected]} />
       </div>
 
@@ -81,54 +78,48 @@ const EventDisplay = (props: EventDisplayProps) => {
 
   return (
     <>
-      <img
-        className="absolute w-full h-full object-center object-cover group-hover:opacity-95 top-0 left-0"
-        src={props.event.style.playlist_tile_image}
-        draggable={false}
-        style={{
-          maskImage: "linear-gradient(to top, rgba(0,0,0,1), rgba(0,0,0, 0.6))",
-        }}
-      />
+      <div className="absolute inset-0 z-0">
+        <img
+          className="w-full h-full object-center object-cover group-hover:scale-105 transition-transform duration-[2000ms]"
+          src={props.event.style.playlist_tile_image}
+          draggable={false}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
+      </div>
 
-      <div className="absolute z-10 top-2 left-2 flex flex-row gap-1">
+      <div className="absolute z-10 top-4 left-4 flex flex-row gap-2">
         {nextWindowIndex !== -1 && (
           <StartsInTag
             start={props.event.event.Windows[nextWindowIndex].Start}
           />
         )}
         {currentWindowIndex !== -1 && (
-          <div className="flex flex-row items-center bg-red-600/45 p-0.5 backdrop-blur-xs rounded-sm pr-">
-            <TbPointFilled className="text-neutral-300 h-[15px] w-[15px]" />
-            <UI.P className="uppercase font-geist font-[700] text-[12px] leading-[14px] text-neutral-100">
-              LIVE NOW
+          <div className="flex flex-row items-center gap-2 bg-red-500/80 px-3 py-1.5 backdrop-blur-md rounded-full border border-red-400/50 shadow-lg shadow-red-500/20">
+            <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+            <UI.P className="uppercase font-black text-[10px] tracking-widest text-white">
+              Live Now
             </UI.P>
           </div>
         )}
-        {props.event.style.schedule_info !== "" && (
-          <UI.P
-            className="uppercase p-0.5 px-1 font-geist font-[700] text-[12px] text-neutral-400 backdrop-blur-xs"
-            style={{
-              backgroundColor: `#${props.event.style.secondary_color}40`,
-            }}
-          >
-            {props.event.style.schedule_info}
-          </UI.P>
-        )}
       </div>
 
-      <div className="mt-auto z-10 flex flex-col p-2 bg-neutral-800/80 gap-0.5 backdrop-blur-xs">
-        <UI.P className="text-[16px] font-geist font-[700]">
+      <div className="mt-auto z-10 flex flex-col p-8 gap-1.5 bg-gradient-to-t from-black/80 to-transparent backdrop-blur-sm">
+        <UI.H1 className="text-3xl font-black text-white drop-shadow-lg">
           {props.event.style.short_format_title}
-        </UI.P>
-        <UI.P className="text-neutral-300/90">
+        </UI.H1>
+        <UI.P className="text-white/60 font-medium text-sm max-w-[80%] line-clamp-2">
           {props.event.style.details_description}
         </UI.P>
       </div>
 
-      <div
+      <motion.div
         key={props.event.event.ID}
-        className="absolute w-full h-0.5 bg-white/20 z-10 animate-move opacity-50"
-      ></div>
+        initial={{ x: "-100%" }}
+        animate={{ x: "0%" }}
+        transition={{ duration: 7, ease: "linear" }}
+        className="absolute bottom-0 left-0 h-1 bg-accent-vibrant z-20 shadow-[0_0_15px_rgba(var(--color-accent-rgb),0.5)]"
+        style={{ width: '100%' }}
+      />
     </>
   );
 };

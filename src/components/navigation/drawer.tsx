@@ -5,6 +5,7 @@ import { useDownloadState } from "src/wrapper/download";
 import { useLibrary } from "src/wrapper/library";
 import { useOptions } from "src/wrapper/options";
 import { openUrl } from "@tauri-apps/plugin-opener";
+import * as rr from "@tanstack/react-router";
 
 import { SimpleUI } from "src/import/ui";
 
@@ -14,12 +15,13 @@ const Drawer = () => {
   const application = useApplicationInformation();
   const userManager = useUserManager();
   const options = useOptions();
+  const location = rr.useLocation();
 
   const state = options.disable_drawer
     ? SimpleUI.DrawerState.Disabled
     : options.wide_drawer
-    ? SimpleUI.DrawerState.Expanded
-    : SimpleUI.DrawerState.Collapsed;
+      ? SimpleUI.DrawerState.Expanded
+      : SimpleUI.DrawerState.Collapsed;
 
   const developer_mode = application.dev || userManager.is_dev();
 
@@ -97,10 +99,10 @@ const Drawer = () => {
         notification:
           serverCount > 0
             ? {
-                colour_scheme: "grey",
-                number: serverCount,
-                type: "NUMBER",
-              }
+              colour_scheme: "grey",
+              number: serverCount,
+              type: "NUMBER",
+            }
             : undefined,
       },
       {
@@ -126,57 +128,57 @@ const Drawer = () => {
     bottom: [
       application.updateNeeded != null
         ? {
-            label: "Update",
-            icon: "IoBuildSharp",
-            clicked: {
-              type: "LINK",
-              href: "/update",
-            },
-            colour_scheme: "blue",
-          }
+          label: "Update",
+          icon: "IoBuildSharp",
+          clicked: {
+            type: "LINK",
+            href: "/update",
+          },
+          colour_scheme: "blue",
+        }
         : null,
       show_advert_test > 0.95
         ? {
-            label: "Claim free V-Bucks!",
-            icon: null,
-            colour_scheme: "red",
-            custom_backdrop: (
-              <div
-                className="absolute top-0 left-0 w-full h-full bg-center bg-cover overflow-hidden"
-                style={{
-                  backgroundImage:
-                    "radial-gradient(50% 200% at 0% 0%, #f0317125 0%, #00000000 100%)",
-                }}
-              >
-                <SimpleUI.FallingElements
-                  density={50}
-                  element={() => (
-                    <SimpleUI.FallingElementContainer
-                      element={() => (
-                        <img
-                          className="w-full h-full select-none"
-                          src="/vbuck.png"
-                        ></img>
-                      )}
-                      size_scale_min={0.35}
-                      size_scale_max={0.5}
-                    />
-                  )}
-                />
-              </div>
-            ),
-            advert: true,
-          }
+          label: "Claim free V-Bucks!",
+          icon: null,
+          colour_scheme: "red",
+          custom_backdrop: (
+            <div
+              className="absolute top-0 left-0 w-full h-full bg-center bg-cover overflow-hidden"
+              style={{
+                backgroundImage:
+                  "radial-gradient(50% 200% at 0% 0%, #f0317125 0%, #00000000 100%)",
+              }}
+            >
+              <SimpleUI.FallingElements
+                density={50}
+                element={() => (
+                  <SimpleUI.FallingElementContainer
+                    element={() => (
+                      <img
+                        className="w-full h-full select-none"
+                        src="/vbuck.png"
+                      ></img>
+                    )}
+                    size_scale_min={0.35}
+                    size_scale_max={0.5}
+                  />
+                )}
+              />
+            </div>
+          ),
+          advert: true,
+        }
         : null,
       developer_mode
         ? {
-            label: "Developer",
-            icon: "IoConstructSharp",
-            clicked: {
-              type: "LINK",
-              href: "/developer",
-            },
-          }
+          label: "Developer",
+          icon: "IoConstructSharp",
+          clicked: {
+            type: "LINK",
+            href: "/developer",
+          },
+        }
         : null,
       {
         label: "Downloads",
@@ -188,10 +190,10 @@ const Drawer = () => {
         notification:
           downloadsCount > 0
             ? {
-                colour_scheme: "grey",
-                number: downloadsCount,
-                type: "NUMBER",
-              }
+              colour_scheme: "grey",
+              number: downloadsCount,
+              type: "NUMBER",
+            }
             : undefined,
       },
       {
@@ -227,33 +229,31 @@ const Drawer = () => {
       },
       developer_mode
         ? {
-            label: "Developer",
-            icon: "IoConstructSharp",
-            clicked: {
-              type: "LINK",
-              href: "/developer",
-            },
-          }
+          label: "Developer",
+          icon: "IoConstructSharp",
+          clicked: {
+            type: "LINK",
+            href: "/developer",
+          },
+        }
         : null,
       application.updateNeeded != null
         ? {
-            label: "Update",
-            icon: "IoBuildSharp",
-            clicked: {
-              type: "LINK",
-              href: "/update",
-            },
-          }
+          label: "Update",
+          icon: "IoBuildSharp",
+          clicked: {
+            type: "LINK",
+            href: "/update",
+          },
+        }
         : null,
     ],
     bottom: [],
   } as SimpleUI.DrawerItemsOptions;
 
-  const routes = !userManager.access()
-    ? EmptyDrawerItems
-    : AuthenticatedDrawerItems;
+  const routes = userManager.access() ? AuthenticatedDrawerItems : EmptyDrawerItems;
 
-  if (application.updateNeeded) return null;
+  if (application.updateNeeded || location.pathname === "/" || !userManager.access()) return null;
 
   return <SimpleUI.Drawer state={state} items={routes} />;
 };

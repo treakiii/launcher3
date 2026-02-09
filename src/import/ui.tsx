@@ -1,9 +1,9 @@
+import React, { useMemo } from "react";
 import { twJoin } from "tailwind-merge";
 import { useLocation, useNavigate } from "@tanstack/react-router";
 
 import * as Icons from "react-icons/io5";
 import { motion } from "motion/react";
-import { useMemo } from "react";
 import NumberFlow from "@number-flow/react";
 
 export namespace SimpleUI {
@@ -33,18 +33,12 @@ export namespace SimpleUI {
   export const Drawer = (props: Partial<DrawerOptions>) => {
     const options = { ...DefaultDrawerOptions, ...props };
 
-    const starting_width = options.state === DrawerState.Disabled ? 0 : 48;
-    const starting_padding =
-      options.state === DrawerState.Disabled ? 0 : "0.375rem";
-
     const final_width =
       options.state === DrawerState.Disabled
         ? 0
         : options.state === DrawerState.Collapsed
-        ? 48
-        : 192;
-    const final_padding =
-      options.state === DrawerState.Disabled ? 0 : "0.375rem";
+          ? 84
+          : 280;
 
     const render_item = (
       item: Partial<DrawerItemOptions> | null,
@@ -64,40 +58,40 @@ export namespace SimpleUI {
     return (
       <motion.nav
         className={twJoin(
-          "flex flex-col items-center gap-1 h-full min-h-max w-12 border-neutral-700/40 border-solid border-0 overflow-hidden pt-1.5 pb-1.5 backdrop-blur-[2px]",
+          "relative flex flex-col items-stretch gap-3 h-full border-white/5 border-solid overflow-hidden p-3 backdrop-blur-xl z-50",
           options.state !== DrawerState.Disabled && [
             options.position === DrawerPosition.Right &&
-              "border-r-0 border-l-1 ml-auto",
-            options.position === DrawerPosition.Left && "border-l-0 border-r-1",
-          ]
+            "border-r-0 border-l-[1px] ml-auto",
+            options.position === DrawerPosition.Left && "border-l-0 border-r-[1px]",
+          ],
+          "bg-black/30"
         )}
-        initial={{
-          width: starting_width,
-          padding: starting_padding,
-        }}
+        initial={false}
         animate={{
           width: final_width,
-          padding: final_padding,
         }}
-        transition={
-          options.state === DrawerState.Disabled
-            ? {
-                duration: 0.2,
-              }
-            : {
-                type: "spring",
-                stiffness: 200,
-                damping: 21,
-              }
-        }
+        transition={{
+          type: "spring",
+          stiffness: 180,
+          damping: 25,
+        }}
       >
-        {options.items.top.map(render_item)}
+        <div className="flex items-center justify-center py-4">
+          <img
+            src="/icon.png"
+            alt="Retrac"
+            className="h-7 w-7 object-contain opacity-90"
+            draggable={false}
+          />
+        </div>
 
-        <s className="mt-auto" />
+        <div className="flex flex-col gap-1.5">
+          {options.items.top.map(render_item)}
+        </div>
 
-        {options.items.bottom.map(render_item)}
-
-        {/* {options.children} */}
+        <div className="mt-auto flex flex-col gap-1.5 pt-3 border-t border-white/5">
+          {options.items.bottom.map(render_item)}
+        </div>
       </motion.nav>
     );
   };
@@ -112,26 +106,26 @@ export namespace SimpleUI {
   };
   export type DrawerItemNotification =
     | {
-        type: "TEXT";
-        colour_scheme: "blue" | "red" | "green" | "yellow" | "grey";
-        text: string;
-      }
+      type: "TEXT";
+      colour_scheme: "blue" | "red" | "green" | "yellow" | "grey";
+      text: string;
+    }
     | {
-        type: "NUMBER";
-        colour_scheme: "blue" | "red" | "green" | "yellow" | "grey";
-        number: number;
-      };
+      type: "NUMBER";
+      colour_scheme: "blue" | "red" | "green" | "yellow" | "grey";
+      number: number;
+    };
   export type DrawerItemOptions = {
     icon: keyof typeof Icons;
     label: string;
     colour_scheme:
-      | "red"
-      | "green"
-      | "blue"
-      | "yellow"
-      | "purple"
-      | "pink"
-      | "grey";
+    | "red"
+    | "green"
+    | "blue"
+    | "yellow"
+    | "purple"
+    | "pink"
+    | "grey";
     clicked?: DrawerItemClickLink | DrawerItemClickFunction;
     notification?: DrawerItemNotification;
     drawer_state?: (typeof DrawerState)[keyof typeof DrawerState];
@@ -169,100 +163,68 @@ export namespace SimpleUI {
       handlers[options.clicked.type]();
     };
 
-    const class_ = {
-      grey: {
-        base: "border-[#1f1f1f00] hover:not-data-[status=active]:bg-neutral-700/10 hover:not-data-[status=active]:border-neutral-700/[15%] text-neutral-400",
-        active:
-          "bg-neutral-700/20 bg-opacity-50 border-neutral-700/40 text-white",
-      },
-      red: {
-        base: "border-[#1f1f1f00] hover:not-data-[status=active]:bg-red-400/5 hover:not-data-[status=active]:border-red-500/5 text-red-200",
-        active: "bg-red-500/20 bg-opacity-50 border-red-500/40 text-white",
-      },
-      green: {
-        base: "border-[#1f1f1f00] hover:not-data-[status=active]:bg-emerald-500/5 hover:not-data-[status=active]:border-emerald-500/10 text-emerald-400",
-        active:
-          "bg-emerald-500/20 bg-opacity-50 border-emerald-500/40 text-white",
-      },
-      blue: {
-        base: "border-[#1f1f1f00] hover:not-data-[status=active]:bg-blue-500/5 hover:not-data-[status=active]:border-blue-500/10 text-blue-300",
-        active: "bg-blue-500/20 bg-opacity-50 border-blue-500/40 text-white",
-      },
-      yellow: {
-        base: "border-[#1f1f1f00] hover:not-data-[status=active]:bg-yellow-500/5 hover:not-data-[status=active]:border-yellow-500/10 text-yellow-200",
-        active:
-          "bg-yellow-500/20 bg-opacity-50 border-yellow-500/40 text-white",
-      },
-      pink: {
-        base: "border-[#1f1f1f00] hover:not-data-[status=active]:bg-fuchsia-500/5 hover:not-data-[status=active]:border-fuchsia-500/10 text-fuchsia-300",
-        active:
-          "bg-fuchsia-500/20 bg-opacity-50 border-fuchsia-500/40 text-white",
-      },
-      purple: {
-        base: "border-[#1f1f1f00] hover:not-data-[status=active]:bg-purple-500/5 hover:not-data-[status=active]:border-purple-500/10 text-purple-300",
-        active:
-          "bg-purple-500/20 bg-opacity-50 border-purple-500/40 text-white",
-      },
-    } as Record<typeof options.colour_scheme, { base: string; active: string }>;
+    const schemeClass = {
+      grey: "text-neutral-400 hover:text-white hover:bg-white/5",
+      red: "text-red-400 hover:text-red-300 hover:bg-red-500/10",
+      green: "text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10",
+      blue: "text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10",
+      yellow: "text-yellow-400 hover:text-yellow-300 hover:bg-yellow-500/10",
+      pink: "text-fuchsia-400 hover:text-fuchsia-300 hover:bg-fuchsia-500/10",
+      purple: "text-purple-400 hover:text-purple-300 hover:bg-purple-500/10",
+    };
 
-    const Icon = Icons[options.icon];
+    const activeClass = "bg-white/10 text-white";
+
+    const Icon = Icons[options.icon] || Icons.IoAlertCircleSharp;
 
     return (
       <button
         draggable={false}
         onClick={handleInteraction}
-        data-status={active ? "active" : "inactive"}
         className={twJoin(
-          "overflow-hidden relative flex gap-2 items-center justify-start min-w-9 w-full h-9 min-h-9 px-[9px] border-[1px] cursor-pointer transition-colors bg-[#ffffff00] hover:duration-[20ms] duration-150 hover:not-data-[status=active]:border-1 rounded-sm outline-none",
-          class_[options.colour_scheme].base,
-          active &&
-            twJoin(
-              class_[options.colour_scheme].active,
-              "hover:none border-1 backdrop-blur-3xl bg-opacity-50"
-            ),
-          props.advert &&
-            "border-[1px] border-solid not-data-[status=active]:border-red-500/5 bg-red-400/5"
+          "relative group flex items-center h-10 rounded-lg transition-all duration-200 cursor-pointer overflow-hidden border border-transparent outline-none",
+          active ? activeClass : schemeClass[options.colour_scheme],
+          options.drawer_state === DrawerState.Collapsed ? "justify-center px-0" : "px-3 w-full"
         )}
       >
-        {props.custom_backdrop ? props.custom_backdrop : null}
+        {active && (
+          <div className="absolute left-0 w-1 h-4 bg-emerald-400 rounded-r-full" />
+        )}
 
-        {props.icon && <Icon className="min-w-4 min-h-4" />}
+        <div className={twJoin(
+          "flex items-center justify-center transition-all duration-200",
+          active ? "" : "opacity-70 group-hover:opacity-100"
+        )}>
+          <Icon size={18} />
+        </div>
 
-        <motion.span
-          className="text-sm leading-[15px] min-w-fit mb-[1px]"
-          initial={{
-            opacity: 0,
-          }}
-          animate={{
-            opacity: options.drawer_state === DrawerState.Expanded ? 1 : 0,
-          }}
-          transition={{
-            duration: 0.2,
-            type: "spring",
-            stiffness: 200,
-            damping: 22.5,
-          }}
-        >
-          {props.label}
-        </motion.span>
         {options.drawer_state === DrawerState.Expanded && (
-          <>
-            {props.notification && props.notification.type === "NUMBER" && (
-              <span className="absolute font-semibold p-1.5 pl-[0.35rem] py-2 bg-neutral-800 right-1 h-5 text-sm flex flex-row items-center justify-center rounded-[0.6rem]">
-                <NumberFlow value={props.notification.number} />
-              </span>
-            )}
+          <span className="ml-3 text-sm font-medium whitespace-nowrap">
+            {options.label}
+          </span>
+        )}
 
-            {props.notification && props.notification.type === "TEXT" && (
-              <span className="absolute p-1.5 py-2 bg-neutral-800 right-1 h-5 text-sm flex flex-row items-center justify-center rounded-[0.6rem]">
-                {props.notification.text}
-              </span>
+        {options.drawer_state === DrawerState.Expanded && options.notification && (
+          <div className="ml-auto">
+            {options.notification.type === "NUMBER" ? (
+              <div className="px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-400 text-[10px] font-bold">
+                <NumberFlow value={options.notification.number} />
+              </div>
+            ) : (
+              <div className="px-2 py-0.5 rounded-md bg-white/5 text-neutral-400 text-[10px] font-bold">
+                {options.notification.text}
+              </div>
             )}
-          </>
+          </div>
+        )}
+
+        {options.drawer_state === DrawerState.Collapsed && options.notification && (
+          <div className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-emerald-400" />
         )}
       </button>
     );
   };
+
 
   export type FallingElementsOptions = {
     element: React.ElementType;
@@ -295,11 +257,11 @@ export namespace SimpleUI {
     size_scale_max: number;
   };
   export const DefaultFallingElementContainersOptions: FallingElementContainersOptions =
-    {
-      element: () => <></>,
-      size_scale_min: 1,
-      size_scale_max: 1,
-    };
+  {
+    element: () => <></>,
+    size_scale_min: 1,
+    size_scale_max: 1,
+  };
   export const FallingElementContainer = (
     props: Partial<FallingElementContainersOptions>
   ) => {

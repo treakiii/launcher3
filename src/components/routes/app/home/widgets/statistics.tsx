@@ -28,35 +28,34 @@ const StatisticsWidget = (props: StatisticsWidgetProps) => {
   }, 0);
 
   return (
-    <div className="flex flex-col p-2 w-[40%] @max-2xl:w-full min-w-max bg-neutral-800/10 rounded-sm border-neutral-700/40 border-1 border-solid backdrop-blur-sm">
-      <UI.P>
-        <span className="font-[500] font-geist">Your Statistics</span>
+    <div className="glass flex flex-col p-5 w-[40%] @max-2xl:w-full min-w-max rounded-2xl relative group overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-tr from-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+      <UI.P className="text-white/40 uppercase tracking-widest text-[10px] font-bold mb-4 z-10">
+        Your Statistics
       </UI.P>
 
-      <div className="flex flex-col gap-[2px] mt-[5px]">
-        <div className="flex flex-row w-full items-center gap-2">
-          <UI.P className="text-neutral-500">Eliminations</UI.P>
-          <div className="w-full min-w-8 h-[1px] bg-neutral-600/20"></div>
-          <UI.P>{eliminations.toLocaleString()}</UI.P>
+      <div className="flex flex-col gap-3 z-10">
+        <div className="flex flex-row w-full items-center justify-between">
+          <UI.P className="text-neutral-400 font-medium">Eliminations</UI.P>
+          <UI.P className="text-white font-bold">{eliminations.toLocaleString()}</UI.P>
         </div>
-        <div className="flex flex-row w-full items-center gap-2">
-          <UI.P className="text-neutral-500">Victory Royales</UI.P>
-          <div className="w-full min-w-8 h-[1px] bg-neutral-600/20"></div>
-          <UI.P>{victoryRoyales.toLocaleString()}</UI.P>
+        <div className="flex flex-row w-full items-center justify-between">
+          <UI.P className="text-neutral-400 font-medium">Victory Royales</UI.P>
+          <UI.P className="text-white font-bold">{victoryRoyales.toLocaleString()}</UI.P>
         </div>
-        <div className="flex flex-row w-full items-center gap-2">
-          <UI.P className="text-neutral-500">Matches Played</UI.P>
-          <div className="w-full min-w-8 h-[1px] bg-neutral-600/20"></div>
-          <UI.P>{matchesPlayed.toLocaleString()}</UI.P>
+        <div className="flex flex-row w-full items-center justify-between">
+          <UI.P className="text-neutral-400 font-medium">Matches Played</UI.P>
+          <UI.P className="text-white font-bold">{matchesPlayed.toLocaleString()}</UI.P>
         </div>
-        <div className="flex flex-row w-full items-center gap-2">
-          <UI.P className="text-neutral-500">Time Alive</UI.P>
-          <div className="w-full min-w-8 h-[1px] bg-neutral-600/20"></div>
-          <UI.P>{formatTime(timeAlive)}</UI.P>
+        <div className="flex flex-row w-full items-center justify-between">
+          <UI.P className="text-neutral-400 font-medium">Time Alive</UI.P>
+          <UI.P className="text-white font-bold">{formatTime(timeAlive)}</UI.P>
         </div>
       </div>
     </div>
   );
+
 };
 
 export default StatisticsWidget;

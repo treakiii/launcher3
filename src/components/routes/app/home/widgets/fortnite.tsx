@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { LAUNCH_STATE, useLibrary } from "src/wrapper/library";
 import { useNavigate } from "@tanstack/react-router";
 import { useDownloadState } from "src/wrapper/download";
 
+import * as Icons from "react-icons/io5";
 import UI from "src/components/core/default";
 
 const IMAGES = [
@@ -28,123 +29,101 @@ const FortniteWidget = () => {
   const buildLaunching = library.launchState === LAUNCH_STATE.LAUNCHING;
 
   return (
-    <div className="relative flex flex-col p-2 gap-0.5 min-w-[45%] w-[70%] @max-2xl:w-[100%] @max-2xl:aspect-[5/2] @max-sm:aspect-[5/3] bg-neutral-800/10 rounded-sm border-neutral-700/40 border-1 border-solid overflow-hidden backdrop-blur-sm min-h-max">
-      <UI.H1 className="z-20">Chapter 2 Season 4</UI.H1>
+    <div className="glass group relative flex flex-col p-8 gap-4 min-w-[45%] w-[70%] @max-2xl:w-[100%] @max-2xl:aspect-[21/9] @max-sm:aspect-[16/9] rounded-3xl overflow-hidden shadow-2xl transition-all duration-500 hover:shadow-accent/20">
 
-      <UI.P className="text-neutral-400 max-w-0 mb-2 z-10">
-        Also known as
-        <span className="text-neutral-300"> Stark Season </span> was the
-        fourteenth season which started on August 27th 2020, and ended on
-        December 1st 2020.
-      </UI.P>
+      <div className="absolute inset-0 z-0 overflow-hidden">
+        <VideoDisplay
+          address={
+            "https://cdn.retrac.site/public/01J7B2FNTZ4SGMKWGPCKSEXWF3/RetracSeason14Card.mp4"
+          }
+          backup={
+            <img
+              src={IMAGES[imageIndex]}
+              className="absolute top-0 left-0 w-full h-full object-cover z-0 opacity-40"
+              draggable={false}
+            />
+          }
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 via-neutral-900/40 to-transparent z-10" />
+        <div className="absolute inset-0 bg-black/20 z-10" />
+      </div>
 
-      {!hasSeason14Downloaded &&
-        !buildLaunched &&
-        !buildLaunching &&
-        !isAnyDownloadActive && (
-          <UI.Button
-            colour="blue"
-            className="p-1.5 py-1 mt-auto z-10 backdrop-blur-2xl"
-            onClick={() => navigate({ to: "/app/downloads" })}
-          >
-            <span className="text-neutral-300">Download Now</span>
-          </UI.Button>
-        )}
+      <div className="relative z-20 mt-auto flex flex-col gap-2 max-w-lg">
+        <UI.P className="text-accent-vibrant font-bold tracking-[0.2em] uppercase text-xs mb-[-4px]">
+          Currently playing
+        </UI.P>
+        <UI.H1 className="text-5xl font-black italic tracking-tighter uppercase drop-shadow-2xl leading-none">
+          Chapter 2 <br /> <span className="text-white/80">Season 4</span>
+        </UI.H1>
 
-      {!buildLaunching &&
-        !buildLaunched &&
-        hasSeason14Downloaded &&
-        !isAnyDownloadActive && (
-          <UI.Button
-            colour="green"
-            className="p-1.5 mt-auto z-10 backdrop-blur-2xl cursor-not-allowed"
-            onClick={() => library.launchBuild(VER, null)}
-          >
-            <span className="text-neutral-300">Launch Game</span>
-          </UI.Button>
-        )}
+        <UI.P className="text-white/60 text-base leading-relaxed mt-2 line-clamp-2 @max-sm:hidden">
+          Also known as <span className="text-white font-bold italic">Stark Season</span>. Experience the OG Marvel collaboration that changed the game forever.
+        </UI.P>
 
-      {buildLaunching && (
-        <UI.Button
-          colour="green"
-          className="p-1.5 mt-auto z-10 backdrop-blur-2xl cursor-not-allowed"
-          disabled
-          style={{
-            cursor: "not-allowed",
-          }}
-        >
-          {isAnyDownloadActive ? (
-            <>
+        <div className="flex flex-row gap-4 mt-6 items-center">
+          {!hasSeason14Downloaded &&
+            !buildLaunched &&
+            !buildLaunching &&
+            !isAnyDownloadActive && (
+              <UI.Button
+                colour="blue"
+                className="px-8 py-3 rounded-xl shadow-lg shadow-accent/20 group-hover:scale-105 transition-transform"
+                onClick={() => navigate({ to: "/app/downloads" })}
+              >
+                <Icons.IoDownloadOutline size={20} />
+                <span className="font-bold text-base">Download Now</span>
+              </UI.Button>
+            )}
+
+          {!buildLaunching &&
+            !buildLaunched &&
+            hasSeason14Downloaded &&
+            !isAnyDownloadActive && (
+              <UI.Button
+                colour="green"
+                className="px-10 py-3 rounded-xl shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform"
+                onClick={() => library.launchBuild(VER, null)}
+              >
+                <Icons.IoPlaySharp size={20} className="ml-1" />
+                <span className="font-bold text-base">Launch Retrac</span>
+              </UI.Button>
+            )}
+
+          {(buildLaunching || isAnyDownloadActive) && (
+            <UI.Button
+              colour="neutral"
+              className="px-8 py-3 rounded-xl opacity-80 cursor-not-allowed"
+              disabled
+            >
               <UI.LoadingSpinner />
-              <span className="text-neutral-400">Download in Progress</span>
-            </>
-          ) : (
-            <>
-              {buildLaunching && <UI.LoadingSpinner />}{" "}
-              <span className="text-neutral-300/50">Launching Game</span>
-            </>
+              <span className="font-bold">
+                {isAnyDownloadActive ? "Downloading..." : "Launching..."}
+              </span>
+            </UI.Button>
           )}
-        </UI.Button>
-      )}
 
-      {!buildLaunching && !buildLaunched && isAnyDownloadActive && (
-        <UI.Button
-          colour="neutral"
-          className="p-1.5 mt-auto z-10 backdrop-blur-2xl cursor-not-allowed"
-          disabled
-        >
-          <UI.LoadingSpinner />
-          <span className="text-neutral-400">Download in Progress</span>
-        </UI.Button>
-      )}
+          {buildLaunched && (
+            <UI.Button
+              colour="neutral"
+              className="px-8 py-3 rounded-xl bg-white/10 text-white/50 cursor-not-allowed"
+              disabled
+            >
+              <span className="font-bold italic">Game is Running</span>
+            </UI.Button>
+          )}
+        </div>
+      </div>
 
-      <VideoDisplay
-        address={
-          "https://cdn.retrac.site/public/01J7B2FNTZ4SGMKWGPCKSEXWF3/RetracSeason14Card.mp4"
-        }
-        backup={
-          <img
-            src={IMAGES[imageIndex]}
-            className="absolute top-0 left-0 w-full h-full object-cover object-center z-50 pointer-events-none"
-            draggable={false}
-            style={{
-              maskImage:
-                "linear-gradient(to bottom, rgba(0,0,0,0.25), rgba(0,0,0,0.05))",
-            }}
-          />
-        }
-      />
-
-      <div
-        className="absolute top-0 left-0 w-full h-full bg-center bg-cover overflow-hidden"
-        style={{
-          backgroundImage:
-            "radial-gradient(100% 60% at 0% 100%, #0f9bfb10 0%, #00000000 100%)",
-        }}
-      ></div>
-
-      <div className="bg-fuchsia-900"></div>
-
-      {buildLaunched && (
-        <UI.Button
-          colour="neutral"
-          className="p-1.5 mt-auto backdrop-blur-2xl z-10"
-          disabled
-          style={{
-            cursor: "not-allowed",
-          }}
-        >
-          <span className="text-neutral-400">
-            {/* Fortnite is Currently Running */}
-            {isAnyDownloadActive
-              ? "Download in Progress"
-              : "Fortnite is Currently Running"}
-          </span>
-        </UI.Button>
-      )}
+      {/* Subtle floating elements/accents */}
+      <div className="absolute top-8 right-8 z-20 flex gap-2">
+        <div className="glass px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest text-white/40 border-white/10">
+          Season 14.40
+        </div>
+      </div>
     </div>
   );
 };
+
 
 type VideoDisplayProps = {
   address: string;

@@ -10,9 +10,7 @@ import { SimpleUI } from "src/import/ui";
 const LootLabsWidget = () => {
   const user = useUserManager();
   if (user._user === null)
-    return (
-      console.error("cannot load loot labs widget: user._user = null") ?? null
-    );
+    return null;
 
   const claimed = user._user.Account.State.ClaimedPackages["lootlabs_1kvbucks"];
   const difference = new Date().getTime() - new Date(claimed || 0).getTime();
@@ -31,9 +29,7 @@ const LootLabsWidget = () => {
   }, [difference]);
 
   const handleClaimOffer = async () => {
-    if (user._token === null)
-      return console.error("No token found, so cannot claim the link");
-
+    if (user._token === null) return;
     const link = await client.get_lootlabs_offer_url(user._token);
     if (link.ok) {
       openUrl(link.data);
@@ -41,61 +37,61 @@ const LootLabsWidget = () => {
   };
 
   return (
-    <div className="relative flex flex-col p-2 gap-0.5 w-[70%] @max-2xl:w-[100%] @max-2xl:h-40 aspect-[5/2.4] bg-neutral-800/10 rounded-sm border-neutral-700/40 border-1 border-solid backdrop-blur-sm">
-      <UI.H1 className="z-20">Looking for more?</UI.H1>
-      <UI.P className="z-20">
-        Receive a gift package of V-Bucks every hour, for completely free! All
-        you have to do is complete a simple offer from our sponsors.
-      </UI.P>
-
+    <div className="glass group relative flex flex-col p-6 gap-3 w-full rounded-2xl overflow-hidden shadow-2xl transition-all duration-300 hover:shadow-accent/5">
       <div
-        className="absolute top-0 left-0 w-full h-full bg-center bg-cover overflow-hidden"
+        className="absolute inset-0 z-0 opacity-40 group-hover:opacity-60 transition-opacity duration-700"
         style={{
-          backgroundImage:
-            "radial-gradient(65% 80% at 50% 0%, #f9317125 0%, #00000000 100%)",
+          backgroundImage: "radial-gradient(circle at 50% 0%, rgba(249, 49, 113, 0.15), transparent 70%)",
         }}
       >
         <SimpleUI.FallingElements
-          density={50}
+          density={30}
           element={() => (
             <SimpleUI.FallingElementContainer
               element={() => (
                 <img
-                  className="w-full h-full select-none"
+                  className="w-full h-full select-none opacity-40"
                   src="/vbuck.png"
-                ></img>
+                />
               )}
-              size_scale_min={0.8}
-              size_scale_max={1.1}
+              size_scale_min={0.6}
+              size_scale_max={0.9}
             />
           )}
         />
       </div>
 
-      {!disabled ? (
-        <UI.Button
-          colour="neutral"
-          className="p-1.5 py-1 mt-auto backdrop-blur-2xl z-20 pointer-events-auto"
-          onClick={handleClaimOffer}
-          disabled={disabled}
-        >
-          <span className="text-neutral-300">Claim your reward now!</span>
-        </UI.Button>
-      ) : (
-        <UI.Button
-          colour="neutral"
-          className="p-1.5 mt-auto bg-neutral-800 backdrop-blur-2xl z-10 hover:bg-neutral-800/50"
-          disabled
-          style={{
-            cursor: "not-allowed",
-          }}
-        >
-          <span className="text-neutral-400">
-            Offer refreshes in {originalText}!
-          </span>
-        </UI.Button>
-      )}
+      <div className="relative z-10 flex flex-col gap-1">
+        <UI.H1 className="text-xl font-black text-white tracking-tight leading-none">
+          Looking for more?
+        </UI.H1>
+        <UI.P className="text-white/50 text-sm font-medium leading-relaxed max-w-[90%]">
+          Receive a gift package of V-Bucks every hour, for completely free! All
+          you have to do is complete a simple offer from our sponsors.
+        </UI.P>
+      </div>
+
+      <div className="relative z-10 mt-auto pt-4">
+        {!disabled ? (
+          <UI.Button
+            colour="blue"
+            className="w-full py-3 rounded-xl shadow-lg shadow-accent/10 hover:shadow-accent/20 transition-all font-bold text-sm tracking-tight"
+            onClick={handleClaimOffer}
+          >
+            Claim your reward now!
+          </UI.Button>
+        ) : (
+          <UI.Button
+            colour="neutral"
+            className="w-full py-3 rounded-xl opacity-80 cursor-not-allowed font-medium text-xs tracking-wide"
+            disabled
+          >
+            Offer refreshes in <span className="text-white font-bold ml-1">{originalText}</span>
+          </UI.Button>
+        )}
+      </div>
     </div>
   );
 };
+
 export default LootLabsWidget;

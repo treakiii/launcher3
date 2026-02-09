@@ -14,7 +14,10 @@
 
 html,
 body {
-  --RETRAC: #4f4f4f;
+  --RETRAC: #1a1a1a;
+  --ACCENT: #10b981;
+  /* Emerald Green */
+  --ACCENT-VIBRANT: #34d399;
 
   margin: 0;
   padding: 0;
@@ -28,11 +31,11 @@ body {
   -webkit-user-drag: none;
   outline: none;
   overflow: hidden;
-  z-index: -100002;
 }
 
 * {
   box-sizing: border-box;
+  outline: none;
 }
 
 #root {
@@ -41,9 +44,11 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #222222;
+  background-color: #050505;
+  background-image:
+    radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 0% 100%, rgba(16, 185, 129, 0.03) 0%, transparent 50%);
   overflow: hidden;
-  z-index: -100001;
 }
 
 .font-plex {
@@ -60,22 +65,38 @@ body {
   font-style: normal;
 }
 
+/* Premium Scrollbar */
 *::-webkit-scrollbar {
-  height: 6px;
-  width: 6px;
+  height: 4px;
+  width: 4px;
 }
+
 *::-webkit-scrollbar-track {
-  border-radius: 0px;
-  background-color: transparent;
+  background: transparent;
 }
+
 *::-webkit-scrollbar-thumb {
-  border-radius: 0px;
-  background-color: color-mix(
-    in oklab,
-    var(--color-neutral-700) /* oklch(37.1% 0 0) = #404040 */ 40%,
-    transparent
-  );
-  border: 5px solid transparent;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  transition: background 0.2s;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glass-vibrant {
+  background: rgba(16, 185, 129, 0.05);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(16, 185, 129, 0.1);
 }
 
 .animate-move {
@@ -86,6 +107,7 @@ body {
   0% {
     width: 0%;
   }
+
   100% {
     width: 100%;
   }
@@ -112,8 +134,10 @@ input[type="number"] {
 }
 
 @theme {
-  --color-neutral-900: color-mix(in srgb, var(--RETRAC) 40%, #000000 100%);
-  --color-neutral-800: color-mix(in srgb, var(--RETRAC) 50%, #000000 30%);
-  --color-neutral-700: color-mix(in srgb, var(--RETRAC) 100%, #000000 20%);
-  --color-neutral-600: var(--RETRAC);
+  --color-neutral-900: #0a0a0a;
+  --color-neutral-800: #121212;
+  --color-neutral-700: #1a1a1a;
+  --color-neutral-600: #262626;
+  --color-accent: var(--ACCENT);
+  --color-accent-vibrant: var(--ACCENT-VIBRANT);
 }

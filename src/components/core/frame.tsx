@@ -5,6 +5,7 @@ import { useApplicationInformation } from "src/wrapper/tauri";
 import { LauncherStage, useUserManager } from "src/wrapper/user";
 import { useOptions } from "src/wrapper/options";
 import * as rr from "@tanstack/react-router";
+import { twJoin } from "tailwind-merge";
 
 import { HiMinus } from "react-icons/hi";
 import { IoCloseSharp } from "react-icons/io5";
@@ -67,12 +68,11 @@ const Frame = () => {
         <div
           className="absolute w-[110%] h-[110%] opacity-20 pointer-events-none z-[-10000]"
           style={{
-            backgroundImage: `url(${
-              convertFileSrc(options.background_image) || "/bg2.jpg"
-            })`,
+            backgroundImage: `url(${convertFileSrc(options.background_image) || "/bg2.jpg"
+              })`,
             backgroundSize: "cover",
             backgroundPosition: "center",
-            filter: `blur(${options.background_blur}rem)`,
+            filter: `blur(${options.background_blur}rem) saturate(1.5)`,
             left: "50%",
             top: "50%",
             transform: "translate(-50%, -50%)",
@@ -80,89 +80,53 @@ const Frame = () => {
         ></div>
       )}
 
-      {!options.enable_background_image &&
-        options.background_gradient != "" && (
-          <div
-            className="absolute w-[110%] h-[110%] opacity-100 pointer-events-none z-[-10000]"
-            style={{
-              backgroundImage: `${options.background_gradient}`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              filter: `blur(${options.background_blur}rem)`,
-              left: "50%",
-              top: "50%",
-              transform: "translate(-50%, -50%)",
-            }}
-          ></div>
-        )}
-
       <main
-        className={`flex flex-row w-full h-full ${
-          options.enable_background_image || options.background_gradient != ""
-            ? "bg-neutral-900/20"
-            : "bg-neutral-900"
-        } max-w-[100dvw] max-h-[100dvh] overflow-hidden z-20`}
+        className={twJoin(
+          "flex flex-row w-full h-full transition-colors duration-500",
+          (options.enable_background_image || options.background_gradient != "")
+            ? "bg-black/40"
+            : "bg-neutral-950",
+          "max-w-[100dvw] max-h-[100dvh] overflow-hidden z-20"
+        )}
         data-tauri-drag-region
-        style={
-          application.windowsVersion >= 22000
-            ? {}
-            : {
-                borderTop: "1px solid #303030",
-                // backgroundImage: "url(/c2s4_keyart.jpg)",
-                // backgroundSize: "cover",
-                // backgroundPosition: "center",
-              }
-        }
       >
         <Drawer />
         <HoverManager />
 
-        {ENSURE_IMAGES_ARE_CACHED.map((image) => (
-          <img
-            key={image}
-            src={image}
-            className="w-0 min-w-0 max-w-0 h-0 min-h-0 max-h-0 overflow-hidden opacity-0"
-            loading="lazy"
-            style={{
-              filter: "blur(1px)",
-              willChange: "transform",
-              transform: "translateZ(0)",
-            }}
-          />
-        ))}
-
-        <div className="flex flex-1 flex-col max-w-full max-h-full overflow-hidden">
+        <div className="flex flex-1 flex-col max-w-full max-h-full overflow-hidden relative">
           <nav
-            className="flex items-center pl-2 w-full bg-neutral-700/10 h-8 border-neutral-700/40 border-b-1 border-solid"
+            className="flex items-center px-4 w-full h-12 border-white/5 border-b-[1px] border-solid backdrop-blur-xl z-50 bg-black/5"
             data-tauri-drag-region
           >
-            <p
-              className="text-neutral-300 font-plex text-[14px] text-base font-bold"
-              data-tauri-drag-region
-            >
-              {application.name.toUpperCase()}
-            </p>
-            <p
-              className="ml-1 mt-[2.5px] min-w-max text-neutral-500 font-plex text-[11px] text-base "
-              data-tauri-drag-region
-            >
-              build {application.version}
-            </p>
-            <s className="ml-auto" />
+            <div className="flex items-center gap-2.5" data-tauri-drag-region>
+              <img
+                src="/icon.png"
+                alt="Retrac"
+                className="h-6 w-6 object-contain"
+                draggable={false}
+              />
+              <div className="h-4 w-[1px] bg-white/10" />
+              <span className="text-white/50 text-xs font-medium">
+                v{application.version}
+              </span>
+            </div>
 
-            <button
-              className="flex items-center justify-center w-9 h-full bg-neutral-900/00 cursor-pointer border-neutral-700/40 hover:bg-neutral-700/10 duration-75"
-              onClick={() => getCurrentWindow().minimize()}
-            >
-              <HiMinus className="text-neutral-400 w-[14px] h-[14px]" />
-            </button>
-            <button
-              className="flex items-center justify-center w-9 h-full bg-neutral-900/00 cursor-pointer border-neutral-700/40 hover:bg-neutral-700/10 duration-75"
-              onClick={() => getCurrentWindow().close()}
-            >
-              <IoCloseSharp className="text-neutral-400" />
-            </button>
+            <div className="ml-auto flex items-center gap-1 h-full">
+              <button
+                className="flex items-center justify-center w-10 h-10 rounded-xl hover:bg-white/5 active:scale-95 transition-all group"
+                onClick={() => getCurrentWindow().minimize()}
+              >
+                <HiMinus className="text-white/30 group-hover:text-white transition-colors" size={16} />
+              </button>
+              <button
+                className="flex items-center justify-center w-10 h-10 rounded-xl hover:bg-red-500/20 active:scale-95 transition-all group"
+                onClick={() => getCurrentWindow().close()}
+              >
+                <IoCloseSharp className="text-white/30 group-hover:text-red-400 transition-colors" size={20} />
+              </button>
+            </div>
           </nav>
+
 
           <BannerRenderer />
 

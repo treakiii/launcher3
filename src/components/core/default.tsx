@@ -8,7 +8,7 @@ namespace UI {
     if (props.children === null) return null;
     return (
       <div
-        className={`border-neutral-700/40 border-b-1 border-solid ${props.className}`}
+        className={`border-white/5 border-b-[1px] border-solid transition-all duration-300 ${props.className}`}
       >
         {props.children}
       </div>
@@ -22,7 +22,7 @@ namespace UI {
     return (
       <Box
         {...props}
-        className={`flex flex-col gap-1 p-1.5 ${props.className}`}
+        className={`flex flex-col gap-2 p-4 ${props.className}`}
       />
     );
   };
@@ -34,7 +34,7 @@ namespace UI {
     return (
       <Box
         {...props}
-        className={`flex flex-row gap-1 p-1.5 ${props.className} @max-xl:flex-col`}
+        className={`flex flex-row gap-4 p-4 ${props.className} @max-xl:flex-col items-center`}
       />
     );
   };
@@ -47,7 +47,7 @@ namespace UI {
     return (
       <p
         {...props}
-        className={`text-neutral-300 font-plex text-sm leading-[15px] min-w-fit ${props.className}`}
+        className={`text-neutral-400 font-inter text-sm leading-relaxed min-w-fit ${props.className}`}
       />
     );
   };
@@ -60,32 +60,32 @@ namespace UI {
     return (
       <h1
         {...props}
-        className={`text-neutral-300 font-plex text-[20px] leading-[20px] font-[650] font-geist ${props.className}`}
+        className={`text-white font-geist text-2xl font-bold tracking-tight ${props.className}`}
       />
     );
   };
 
   export const BUTTON_COLOURS = {
     neutral: [
-      "bg-neutral-500/20 border-neutral-500/20 border-1 border-solid min-w-max p-0.5 py-1 rounded-sm cursor-pointer text-neutral-300 font-inter text-[14px] text-base hover:bg-neutral-500/30 flex flex-row items-center justify-center gap-2 disabled:text-neutral-500 disabled:hover:bg-neutral-500/1s0 disabled:cursor-not-allowed outline-none",
+      "bg-white/5 border-white/10 border-[1px] border-solid min-w-max px-4 py-2 rounded-lg cursor-pointer text-neutral-200 font-inter text-sm hover:bg-white/10 active:scale-95 transition-all flex flex-row items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed",
     ],
     red: [
-      "bg-red-500/20 border-red-500/20 border-1 border-solid min-w-max p-0.5 py-1 rounded-sm cursor-pointer text-red-300 font-plex text-[14px] text-base hover:bg-red-500/30 flex flex-row items-center justify-center gap-2 disabled:text-neutral-500 disabled:hover:bg-red-500/20 disabled:cursor-not-allowed outline-none",
+      "bg-red-500/10 border-red-500/20 border-[1px] border-solid min-w-max px-4 py-2 rounded-lg cursor-pointer text-red-400 font-inter text-sm hover:bg-red-500/20 active:scale-95 transition-all flex flex-row items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed",
     ],
     green: [
-      "bg-green-500/20 border-green-500/20 border-1 border-solid min-w-max p-0.5 py-1 rounded-sm cursor-pointer text-green-400 font-plex text-[14px] text-base hover:bg-green-500/30 flex flex-row items-center justify-center gap-2 disabled:text-neutral-500 disabled:hover:bg-green-500/20 disabled:cursor-not-allowed outline-none",
+      "bg-emerald-500/10 border-emerald-500/20 border-[1px] border-solid min-w-max px-4 py-2 rounded-lg cursor-pointer text-emerald-400 font-inter text-sm hover:bg-emerald-500/20 active:scale-95 transition-all flex flex-row items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed",
     ],
     blue: [
-      "bg-blue-500/20 border-blue-500/20 border-1 border-solid min-w-max p-0.5 py-1 rounded-sm cursor-pointer text-blue-300 font-plex text-[14px] text-base hover:bg-blue-500/30 flex flex-row items-center justify-center gap-2 disabled:text-neutral-500 disabled:hover:bg-blue-500/20 disabled:cursor-not-allowed outline-none",
+      "bg-accent/10 border-accent/20 border-[1px] border-solid min-w-max px-4 py-2 rounded-lg cursor-pointer text-accent-vibrant font-inter text-sm hover:bg-accent/20 active:scale-95 transition-all flex flex-row items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed",
     ],
     discord: [
-      "bg-[#5865f2]/20 border-[#5865f2]/20 border-1 border-solid min-w-max p-0.5 py-1 rounded-sm cursor-pointer text-neutral-300 font-plex text-[14px] text-base hover:bg-[#5865f2]/30 flex flex-row items-center justify-center gap-2 disabled:text-neutral-500 disabled:hover:bg-[#5865f2]/20 disabled:cursor-not-allowed outline-none",
+      "bg-[#5865f2]/10 border-[#5865f2]/20 border-[1px] border-solid min-w-max px-4 py-2 rounded-lg cursor-pointer text-white font-inter text-sm hover:bg-[#5865f2]/20 active:scale-95 transition-all flex flex-row items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed",
     ],
     pink: [
-      "bg-fuchsia-500/20 border-fuchsia-500/20 border-1 border-solid min-w-max p-0.5 py-1 rounded-sm cursor-pointer text-fuchsia-300 font-plex text-[14px] text-base hover:bg-fuchsia-500/30 flex flex-row items-center justify-center gap-2 disabled:text-neutral-500 disabled:hover:bg-fuchsia-500/20 disabled:cursor-not-allowed outline-none",
+      "bg-fuchsia-500/10 border-fuchsia-500/20 border-[1px] border-solid min-w-max px-4 py-2 rounded-lg cursor-pointer text-fuchsia-400 font-inter text-sm hover:bg-fuchsia-500/20 active:scale-95 transition-all flex flex-row items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed",
     ],
     invisible: [
-      "bg-transparent border-neutral-500/20 border-1 border-solid min-w-max p-0.5 py-1 rounded-sm cursor-pointer text-neutral-300 font-plex text-[14px] text-base hover:bg-neutral-500/10 flex flex-row items-center justify-center gap-2 disabled:text-neutral-500 disabled:hover:bg-neutral-500/20 disabled:cursor-not-allowed outline-none",
+      "bg-transparent border-transparent border-[1px] border-solid min-w-max px-4 py-2 rounded-lg cursor-pointer text-neutral-400 font-inter text-sm hover:bg-white/5 active:scale-95 transition-all flex flex-row items-center justify-center gap-2 disabled:opacity-50",
     ],
   };
 
@@ -100,24 +100,24 @@ namespace UI {
     delete normalReactProps.loadAfterClick;
     delete normalReactProps.loadAfterClickText;
 
-    const clicked = useState(false);
+    const [clicked, setClicked] = useState(false);
     return (
       <button
         {...normalReactProps}
         onClick={(e) => {
           try {
-            clicked[1](true);
+            setClicked(true);
             props.onClick && props.onClick(e);
-            setTimeout(() => clicked[1](false), 10000);
+            setTimeout(() => setClicked(false), 10000);
           } catch (error) {
-            clicked[1](false);
+            setClicked(false);
           }
         }}
         type="button"
-        className={`${BUTTON_COLOURS[props.colour][0]} ${props.className}`}
-        disabled={(props.loadAfterClick && clicked[0]) || props.disabled}
+        className={`${BUTTON_COLOURS[props.colour][0]} ${props.className || ""}`}
+        disabled={(props.loadAfterClick && clicked) || props.disabled}
       >
-        {props.loadAfterClick && clicked[0] ? (
+        {props.loadAfterClick && clicked ? (
           <>
             <LoadingSpinner />
             {props.loadAfterClickText}
@@ -131,48 +131,24 @@ namespace UI {
 
   export const LoadingSpinner = () => {
     return (
-      <span className="flex flex-row w-min gap-[0.2rem] items-center justify-center z-2">
+      <span className="flex flex-row w-min gap-[4px] items-center justify-center">
         {[...Array(3)].map((_, i) => (
-          <LoadingBall key={i} i={i} />
+          <motion.span
+            key={i}
+            className="w-1.5 h-1.5 bg-current rounded-full"
+            animate={{ opacity: [0.2, 1, 0.2] }}
+            transition={{
+              duration: 1,
+              repeat: Infinity,
+              delay: i * 0.2,
+            }}
+          />
         ))}
       </span>
     );
   };
 
-  type LoadingBallProps = {
-    i: number;
-  };
-
-  const LoadingBall = (props: LoadingBallProps) => {
-    return (
-      <span
-        className="animate-pulse w-1.5 h-1.5 bg-neutral-300/20 rounded-full"
-        style={{
-          animationDelay: `${props.i * 0.2}s`,
-        }}
-      ></span>
-    );
-  };
-  export const LoadingSpinnerOpaque = () => {
-    return (
-      <span className="flex flex-row w-min gap-[0.2rem] items-center justify-center z-2">
-        {[...Array(3)].map((_, i) => (
-          <LoadingBallOpaque key={i} i={i} />
-        ))}
-      </span>
-    );
-  };
-
-  const LoadingBallOpaque = (props: LoadingBallProps) => {
-    return (
-      <span
-        className="animate-pulse w-1.5 h-1.5 bg-neutral-400 rounded-full"
-        style={{
-          animationDelay: `${props.i * 0.2}s`,
-        }}
-      ></span>
-    );
-  };
+  export const LoadingSpinnerOpaque = () => <LoadingSpinner />;
 
   interface MinDurationProps {
     visible: boolean;
@@ -189,7 +165,7 @@ namespace UI {
     const [minTimeElapsed, setMinTimeElapsed] = useState(false);
 
     useEffect(() => {
-      let timer: number;
+      let timer: any;
 
       if (visible) {
         setShouldRender(true);
@@ -202,12 +178,19 @@ namespace UI {
       }
 
       return () => clearTimeout(timer);
-    }, [visible]);
+    }, [visible, minDuration, minTimeElapsed]);
 
     return (
       <AnimatePresence>
-        {" "}
-        {shouldRender ? <>{children}</> : null}
+        {shouldRender ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            {children}
+          </motion.div>
+        ) : null}
       </AnimatePresence>
     );
   };
@@ -222,44 +205,45 @@ namespace UI {
   };
 
   export const RowButton = (props: ButtonProps) => {
-    const colour = (
+    const colourClass = (
       {
-        blue: "hover:bg-blue-400/30 text-neutral-600 hover:text-blue-200",
-        green: "hover:bg-green-400/30 text-neutral-600 hover:text-green-200",
-        red: "hover:bg-red-400/30 text-neutral-600 hover:text-red-200",
-        invisible: "hover:bg-neutral-700/10 text-neutral-400",
+        blue: "hover:bg-accent/20 text-accent-vibrant",
+        green: "hover:bg-emerald-500/20 text-emerald-400",
+        red: "hover:bg-red-500/20 text-red-500",
+        invisible: "hover:bg-white/10 text-neutral-400",
       } as const
     )[props.colour];
 
     const [showTooltip, setShowTooltip] = useState(false);
 
     return (
-      <>
+      <div className="relative flex items-center justify-center">
         <button
-          className={`aspect-square min-w-max h-8 flex items-center justify-center p-1.5 bg-neutral-700/20 rounded-md ${
-            props.disabled ? "cursor-not-allowed" : "cursor-pointer"
-          } transition-all ${colour}`}
+          className={`aspect-square w-9 h-9 flex items-center justify-center bg-white/5 rounded-lg transition-all active:scale-90 ${props.disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
+            } ${colourClass}`}
           onClick={props.on_click}
           onMouseEnter={() => setShowTooltip(true)}
           onMouseLeave={() => setShowTooltip(false)}
           disabled={props.disabled}
         >
-          <motion.div
-            className="absolute text-xs text-center pointer-events-none bg-neutral-800 p-0.5 px-1.5 min-w-max rounded-md backdrop-blur-md"
-            initial={{ opacity: 0, y: -10, x: !props._last ? 0 : -20 }}
-            animate={{
-              opacity: showTooltip ? 1 : 0,
-              y: showTooltip ? -30 : -20,
-              x: !props._last ? 0 : -20,
-            }}
-          >
-            {props.tooltip}
-          </motion.div>
           {props.children}
         </button>
-      </>
+        <AnimatePresence>
+          {showTooltip && props.tooltip && (
+            <motion.div
+              className="absolute bottom-full mb-2 px-2 py-1 bg-neutral-800 text-white text-xs rounded-md shadow-xl border border-white/10 whitespace-nowrap z-50 pointer-events-none"
+              initial={{ opacity: 0, y: 5, scale: 0.9 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 5, scale: 0.9 }}
+            >
+              {props.tooltip}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     );
   };
 }
+
 
 export default UI;

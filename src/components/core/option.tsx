@@ -4,6 +4,7 @@ import { open } from "@tauri-apps/plugin-dialog";
 import * as Icons from "react-icons/io5";
 import UI from "src/components/core/default";
 import { AnimatePresence, motion } from "motion/react";
+import { twMerge, twJoin } from "tailwind-merge";
 
 export type OptionTypeString = { _a: "string" };
 export type OptionTypeBoolean = { _a: "boolean" };
@@ -30,22 +31,22 @@ type OptionProps<T extends AllowedOptionTypes, K extends OptionStateType> = {
   set: (state: K) => void;
   icon?: keyof typeof Icons;
   colour?:
-    | "red"
-    | "blue"
-    | "green"
-    | "yellow"
-    | "pink"
-    | "purple"
-    | "orange"
-    | "gray"
-    | "teal"
-    | "indigo"
-    | "slate"
-    | "neutral"
-    | "violet"
-    | "emerald"
-    | "lime"
-    | "rose";
+  | "red"
+  | "blue"
+  | "green"
+  | "yellow"
+  | "pink"
+  | "purple"
+  | "orange"
+  | "gray"
+  | "teal"
+  | "indigo"
+  | "slate"
+  | "neutral"
+  | "violet"
+  | "emerald"
+  | "lime"
+  | "rose";
 
   _is_file_override?: boolean;
   _colour_options?: string[];
@@ -108,55 +109,56 @@ const Option = <T extends AllowedOptionTypes, K extends OptionStateType>(
 
   return (
     <motion.div
-      className="@container relative flex flex-col p-2.5 py-2 gap-0.5 w-[100%] bg-neutral-800/10 rounded-sm border-neutral-700/40 border-1 border-solid backdrop-blur-md"
+      className="glass group relative flex flex-col p-5 gap-0.5 w-full rounded-2xl transition-all duration-300 hover:shadow-xl hover:shadow-white/5 active:scale-[0.99]"
       variants={
         props._animate
           ? {
-              hidden: { opacity: 0, x: 20 },
-              visible: { opacity: 1, x: 0 },
-            }
+            hidden: { opacity: 0, y: 10 },
+            visible: { opacity: 1, y: 0 },
+          }
           : {}
       }
-      transition={{ type: "spring", stiffness: 200, damping: 19 }}
+      transition={{ type: "spring", stiffness: 200, damping: 20 }}
     >
-      <div
-        className={`flex ${
-          props.type._a === "slider" ? "flex-col" : "flex-row items-center"
-        } w-full h-full gap-1`}
-      >
-        <div className="flex flex-col w-full h-full">
-          <span className="flex flex-row items-center gap-1 font-[500] text-neutral-300 text-[1rem] leading-5">
-            {Icon && (
-              <Icon
-                style={{
-                  color: props.colour
-                    ? `var(--color-${props.colour}-300) !important`
-                    : "",
-                  fill: props.colour
-                    ? `var(--color-${props.colour}-300) !important`
-                    : "",
-                }}
-              />
-            )}
+      <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl" />
 
-            {props.title}
-          </span>
-          <span className="text-sm font-[400] text-neutral-500 leading-4">
+      <div
+        className={`relative z-10 flex ${props.type._a === "slider" ? "flex-col" : "flex-row items-center"
+          } w-full h-full gap-4`}
+      >
+        <div className="flex flex-col flex-1 h-full min-w-0">
+          <div className="flex flex-row items-center gap-2 mb-1">
+            {Icon && (
+              <div className="p-1.5 rounded-lg bg-white/5 group-hover:bg-white/10 transition-colors">
+                <Icon
+                  size={16}
+                  className="text-white/60 group-hover:text-white transition-colors"
+                />
+              </div>
+            )}
+            <span className="font-bold text-white text-base tracking-tight leading-none truncate">
+              {props.title}
+            </span>
+          </div>
+          <span className="text-sm font-medium text-white/40 leading-relaxed truncate">
             {props.description}
           </span>
         </div>
 
-        <AnimatePresence>
-          {controls[props.type._a] ?? (
-            <div className="text-red-300/70 text-sm">
-              Unsupported option type
-            </div>
-          )}
-        </AnimatePresence>
+        <div className="shrink-0">
+          <AnimatePresence mode="wait">
+            {controls[props.type._a] ?? (
+              <div className="text-red-400 text-sm font-bold">
+                Invalid Type
+              </div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
     </motion.div>
   );
 };
+
 
 const ControlStateBoolean = (
   props: OptionProps<OptionTypeBoolean, boolean>
@@ -235,11 +237,10 @@ const ControlStateBoolean = (
       )}
 
       <div
-        className={`flex items-center justify-center min-w-7 h-7 rounded-sm cursor-pointer border-1 border-solid active:scale-[0.98] backdrop-blur-lg ${
-          props.state
-            ? "bg-green-700/40 border-green-500/20 hover:bg-green-800/50"
-            : "bg-neutral-800/50 border-neutral-500/20 hover:bg-neutral-800/20"
-        }`}
+        className={`flex items-center justify-center min-w-7 h-7 rounded-sm cursor-pointer border-1 border-solid active:scale-[0.98] backdrop-blur-lg ${props.state
+          ? "bg-green-700/40 border-green-500/20 hover:bg-green-800/50"
+          : "bg-neutral-800/50 border-neutral-500/20 hover:bg-neutral-800/20"
+          }`}
         onClick={() => props.set(!props.state)}
       >
         {props.state ? (
@@ -288,30 +289,28 @@ const ControlStateColours = (props: OptionProps<OptionTypeColour, string>) => {
           style={
             !props._colour_gradient
               ? {
-                  backgroundColor:
-                    colour === "#4f4f4f"
-                      ? props.state === colour
-                        ? "#ffffff40"
-                        : "#ffffff20"
-                      : `color-mix(in srgb, ${colour} ${
-                          props.state === colour ? "50%" : "10%"
-                        }, transparent 1%)`,
-                  borderColor:
-                    colour === "#4f4f4f" || colour === "#1f1f1f"
-                      ? props.state === colour
-                        ? "#ffffff20"
-                        : "#ffffff10"
-                      : `color-mix(in srgb, ${colour} ${
-                          props.state === colour ? "50%" : "15%"
-                        }, transparent 100%)`,
-                }
+                backgroundColor:
+                  colour === "#4f4f4f"
+                    ? props.state === colour
+                      ? "#ffffff40"
+                      : "#ffffff20"
+                    : `color-mix(in srgb, ${colour} ${props.state === colour ? "50%" : "10%"
+                    }, transparent 1%)`,
+                borderColor:
+                  colour === "#4f4f4f" || colour === "#1f1f1f"
+                    ? props.state === colour
+                      ? "#ffffff20"
+                      : "#ffffff10"
+                    : `color-mix(in srgb, ${colour} ${props.state === colour ? "50%" : "15%"
+                    }, transparent 100%)`,
+              }
               : {
-                  backgroundImage: colour,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                  backgroundColor: "transparent",
-                  borderColor: "#2f2f2f",
-                }
+                backgroundImage: colour,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundColor: "transparent",
+                borderColor: "#2f2f2f",
+              }
           }
           onClick={() => props.set(colour)}
         ></div>
@@ -652,78 +651,78 @@ type OptionGroupProps = {
 };
 
 const OptionGroup = (props: OptionGroupProps) => {
-  const [open, set] = useState(props._hiddenByDefault ? false : true);
+  const [isOpen, setIsOpen] = useState(props._hiddenByDefault ? false : true);
 
   return (
     <motion.div
-      className={`relative flex ${
-        props._row ? "flex-row @max-2xl:flex-col" : "flex-col"
-      } gap-2 p-2.5 ${
-        !props._hideBorder &&
-        "border-neutral-700/40 border-b-[1px] border-solid"
-      } py-3.5 ${props._last ? "pb-3" : ""} ${props._first ? "pt-2.5" : ""}
-      ${props._overflow ? "overflow-y-auto" : ""}
-      `}
+      className={twMerge(
+        "relative flex flex-col gap-4 py-8 px-2",
+        !props._hideBorder && "border-b border-white/5",
+        props._last && "pb-12",
+        props._first && "pt-4",
+        props._overflow && "overflow-y-auto"
+      )}
       variants={
         props._animate
           ? {
-              hidden: { opacity: 0, scale: 0.95 },
-              visible: { opacity: 1, scale: 1 },
-            }
+            hidden: { opacity: 0 },
+            visible: { opacity: 1 },
+          }
           : {}
       }
       initial="hidden"
       animate="visible"
       exit="hidden"
-      transition={{
-        staggerChildren: 0.05,
-      }}
     >
       {!!props.title && (
-        <UI.P
-          onClick={() => set((prev) => (props._hideable ? !prev : true))}
-          className={`flex flex-row items-center gap-0.5 text-neutral-300/70 absolute top-[-0.6rem] bg-neutral-900/20 backdrop-blur-2xl pb-[0.15rem] pt-[0.1rem] rounded-sm px-1 ${
-            props._hideable &&
-            "cursor-pointer hover:text-neutral-400 transition-colors duration-[70ms]"
-          }`}
-        >
-          {props._hideable && (
-            <motion.span
-              initial={{ rotate: 0 }}
-              animate={{ rotate: open ? 0 : -90 }}
-            >
-              <Icons.IoChevronDownSharp />
-            </motion.span>
+        <div
+          className={twMerge(
+            "flex items-center justify-between px-3 w-full",
+            props._hideable && "cursor-pointer group/title"
           )}
-
-          {props.title}
-        </UI.P>
-      )}
-      {props._hideable ? (
-        <motion.div
-          className="relative flex flex-col gap-2 overflow-hidden"
-          animate={{
-            opacity: open ? 1 : 0,
-            height: open ? "auto" : 0,
-          }}
-          exit={{ opacity: 0, height: 0 }}
-          transition={{
-            height: {
-              type: "spring",
-              stiffness: 170,
-              damping: 18,
-            },
-            opacity: {
-              duration: 0.4,
-            },
-            staggerChildren: 1,
-          }}
+          onClick={() => props._hideable && setIsOpen(!isOpen)}
         >
-          {props.children}
-        </motion.div>
-      ) : (
-        props.children
+          <div className="flex flex-col">
+            <UI.H1 className="text-xl tracking-tight leading-none group-hover/title:text-accent-vibrant transition-colors">
+              {props.title}
+            </UI.H1>
+            {props._hideable && (
+              <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.2em] mt-1.5 group-hover/title:text-accent/40 transition-colors">
+                {isOpen ? "Collapse Section" : "Expand Section"}
+              </span>
+            )}
+          </div>
+
+          {props._hideable && (
+            <motion.div
+              className="p-2 rounded-xl bg-white/5 text-white/40 group-hover/title:bg-accent/20 group-hover/title:text-accent-vibrant transition-all"
+              animate={{ rotate: isOpen ? 0 : -90 }}
+            >
+              <Icons.IoChevronDown size={18} />
+            </motion.div>
+          )}
+        </div>
       )}
+
+      <motion.div
+        className={twMerge(
+          "grid gap-3 w-full",
+          props._row ? "grid-cols-2 @max-2xl:grid-cols-1" : "grid-cols-1",
+          props._hideable && "overflow-hidden"
+        )}
+        animate={{
+          opacity: isOpen ? 1 : 0,
+          height: isOpen ? "auto" : 0,
+          marginTop: isOpen ? 0 : -16,
+        }}
+        transition={{
+          type: "spring",
+          stiffness: 250,
+          damping: 30,
+        }}
+      >
+        {props.children}
+      </motion.div>
     </motion.div>
   );
 };
